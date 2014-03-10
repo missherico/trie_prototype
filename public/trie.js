@@ -67,7 +67,6 @@ Trie.prototype.autoComplete = function(prefix){
       return [];
     } 
     var res = result.getWords([],prefix);
-    console.log(res);
     return result.getWords([],prefix);
 
 

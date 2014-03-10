@@ -10,7 +10,7 @@ window.App = {
     App.autocompleter = new Autocompleter();
     var ws = new WebSocket('ws://' + window.location.host + window.location.pathname);
     ws.onmessage = function(m) { 
-      autocompleter.add(m.data); 
+      App.autocompleter.add(m.data); 
     };
 
   }
@@ -19,3 +19,23 @@ $(document).ready(function(){
   App.initialize();
 });
 
+App.Routers.Main = Backbone.Router.extend({
+  routes: {
+    "(/)": "index",
+
+  },
+
+
+  index: function() {
+    $(function() {
+      $('#query').on('input', function() {
+        var query = $('#query').val();
+        $('#results').empty();
+        resulting_array = App.autocompleter.complete(query);
+        _.each(resulting_array, function(item) {
+          $('#results').append('<li>' + item + '</li>');
+        });
+      });
+    });
+  }
+});
