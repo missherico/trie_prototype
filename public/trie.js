@@ -5,9 +5,8 @@ Trie = function(){
 
 Trie.prototype.learn = function(word, index){
   
-  if (index === undefined) {
-    index = 0;
-  }
+  index = index || 0;
+
   var letter = word[index];
   if (index !== word.length) {
     if (this.characters[letter] === undefined){
@@ -26,6 +25,7 @@ Trie.prototype.find = function(word, index){
   index = index || 0;
   var letter = word[index];
   var node = this.characters;
+
     if (node[letter]){
       return node[letter].find(word, index + 1);
     }
@@ -35,17 +35,22 @@ Trie.prototype.find = function(word, index){
     else {
       return false;
     }
-
-
-
-  // This function will return the node in the trie
-  // which corresponds to the end of the passed in word.
-
-  // Be sure to consider what happens if the word is not in this Trie.
 };
 
 Trie.prototype.getWords = function(words, currentWord){
-  
+  words = words || [];
+  currentWord = currentWord || "";
+
+  if (this.isWord){
+    words.push(currentWord);
+  }
+  for (var c in this.characters){
+    var newWord = currentWord + c;
+    if (this.characters[c].characters){
+      this.characters[c].getWords(words, newWord)
+    }
+  }
+  return words;
   // go down each branch, collect the word flags
   // This function will return all the words which are
   // contained in this Trie.
@@ -57,4 +62,13 @@ Trie.prototype.autoComplete = function(prefix){
   // This function will return all completions 
   // for a given prefix.
   // It should use find and getWords.
+    var result = this.find(prefix);
+    if(!result){
+      return [];
+    } 
+    var res = result.getWords([],prefix);
+    console.log(res);
+    return result.getWords([],prefix);
+
+
 };
